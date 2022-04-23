@@ -53,6 +53,13 @@ class TaskList(LoginRequiredMixin, ListView):
         # This will return count of non-complete items
         # We don't need to filter per user because it's already done above
         context['count'] = context['tasks'].filter(complete=False).count() 
+        
+        search_input = self.request.GET.get('search-area') or ''
+        if search_input:
+            context['tasks'] = context['tasks'].filter(
+                title__icontains=search_input)
+
+        context['search_input'] = search_input
         return context
 
 
